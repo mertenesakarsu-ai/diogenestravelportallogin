@@ -202,7 +202,7 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState({ email: "", password: "", form: "" })
-  const [loggedInUser, setLoggedInUser] = useState<any>(null) // Added state for logged in user
+  const [loggedInUser, setLoggedInUser] = useState<any>(null)
 
   const mockUsers = [
     {
@@ -318,10 +318,7 @@ export default function LoginPage() {
           <div className="bg-card rounded-2xl shadow-lg border border-border/50 backdrop-blur-sm p-8">
             <div className="mb-8 text-center">
               <div className="flex justify-center mb-6">
-                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 p-0.5 shadow-2xl animate-glow">
-                  {/* Glow ring effect */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/30 via-orange-500/30 to-green-500/30 blur-xl" />
-                  {/* Logo container */}
+                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 p-0.5 shadow-xl">
                   <div className="relative w-full h-full bg-background rounded-full flex items-center justify-center">
                     <Image
                       src="/images/logo.png"
@@ -436,14 +433,6 @@ export default function LoginPage() {
                 )}
               </button>
             </form>
-
-            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-2">Demo Kredileri:</p>
-              <div className="space-y-1 text-xs text-blue-600 dark:text-blue-300">
-                <p>👤 Admin: admin@diogenestravel.com / admin123</p>
-                <p>📅 Rezervasyon: reservation@diogenestravel.com / reservation123</p>
-              </div>
-            </div>
           </div>
 
           <p className="text-center text-sm text-muted-foreground mt-8">
