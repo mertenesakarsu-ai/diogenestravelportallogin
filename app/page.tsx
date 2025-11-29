@@ -81,7 +81,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <h1 className="text-xl font-bold text-slate-900 text-center mb-0.5">Diogenes Travel Portal</h1>
+            <h1 className="text-3xl font-bold text-slate-900 text-center mb-0.5">Diogenes Travel Portal</h1>
             <p className="text-slate-500 text-center text-xs">Seyahat Yönetim Sistemi</p>
           </div>
 
