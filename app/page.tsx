@@ -318,8 +318,11 @@ export default function LoginPage() {
           <div className="bg-card rounded-2xl shadow-lg border border-border/50 backdrop-blur-sm p-8">
             <div className="mb-8 text-center">
               <div className="flex justify-center mb-6">
-                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 p-0.5 shadow-lg">
-                  <div className="w-full h-full bg-background rounded-full flex items-center justify-center">
+                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 p-0.5 shadow-2xl animate-glow">
+                  {/* Glow ring effect */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/30 via-orange-500/30 to-green-500/30 blur-xl" />
+                  {/* Logo container */}
+                  <div className="relative w-full h-full bg-background rounded-full flex items-center justify-center">
                     <Image
                       src="/images/logo.png"
                       alt="Diogenes Travel Portal"
