@@ -86,45 +86,54 @@ export default function LoginPage() {
         <svg className="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="mapLines" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-              {/* Orange paths */}
-              <path d="M0,80 Q50,60 100,80 T200,80" fill="none" stroke="#fb923c" strokeWidth="2" opacity="0.6" />
-              <path d="M20,120 Q70,100 120,120 T220,120" fill="none" stroke="#fb923c" strokeWidth="1.5" opacity="0.5" />
-              <path d="M-20,50 Q30,30 80,50 T180,50" fill="none" stroke="#fdba74" strokeWidth="1" opacity="0.4" />
+              {/* Orange paths - more prominent */}
+              <path d="M0,80 Q50,60 100,80 T200,80" fill="none" stroke="#fb923c" strokeWidth="3" opacity="0.85" />
+              <path d="M20,120 Q70,100 120,120 T220,120" fill="none" stroke="#fb923c" strokeWidth="2.5" opacity="0.75" />
+              <path d="M-20,50 Q30,30 80,50 T180,50" fill="none" stroke="#fdba74" strokeWidth="2" opacity="0.65" />
+              <path d="M10,150 Q60,170 110,150 T210,150" fill="none" stroke="#fb923c" strokeWidth="2" opacity="0.7" />
               
-              {/* Blue paths */}
-              <path d="M0,100 Q50,120 100,100 T200,100" fill="none" stroke="#60a5fa" strokeWidth="2" opacity="0.6" />
-              <path d="M30,140 Q80,160 130,140 T230,140" fill="none" stroke="#60a5fa" strokeWidth="1.5" opacity="0.5" />
-              <path d="M-10,70 Q40,90 90,70 T190,70" fill="none" stroke="#93c5fd" strokeWidth="1" opacity="0.4" />
+              {/* Blue paths - more prominent */}
+              <path d="M0,100 Q50,120 100,100 T200,100" fill="none" stroke="#60a5fa" strokeWidth="3" opacity="0.85" />
+              <path d="M30,140 Q80,160 130,140 T230,140" fill="none" stroke="#60a5fa" strokeWidth="2.5" opacity="0.75" />
+              <path d="M-10,70 Q40,90 90,70 T190,70" fill="none" stroke="#93c5fd" strokeWidth="2" opacity="0.65" />
+              <path d="M15,30 Q65,10 115,30 T215,30" fill="none" stroke="#60a5fa" strokeWidth="2" opacity="0.7" />
               
               {/* Cyan/Turquoise paths */}
-              <path d="M10,60 Q60,40 110,60 T210,60" fill="none" stroke="#22d3ee" strokeWidth="2" opacity="0.5" />
-              <path d="M40,100 Q90,80 140,100 T240,100" fill="none" stroke="#67e8f9" strokeWidth="1.5" opacity="0.4" />
+              <path d="M10,60 Q60,40 110,60 T210,60" fill="none" stroke="#22d3ee" strokeWidth="2.5" opacity="0.8" />
+              <path d="M40,100 Q90,80 140,100 T240,100" fill="none" stroke="#67e8f9" strokeWidth="2" opacity="0.7" />
+              <path d="M-5,180 Q45,160 95,180 T195,180" fill="none" stroke="#22d3ee" strokeWidth="2" opacity="0.65" />
               
               {/* Green paths */}
-              <path d="M0,130 Q50,150 100,130 T200,130" fill="none" stroke="#4ade80" strokeWidth="2" opacity="0.5" />
-              <path d="M25,170 Q75,190 125,170 T225,170" fill="none" stroke="#86efac" strokeWidth="1.5" opacity="0.4" />
-              <path d="M-15,110 Q35,130 85,110 T185,110" fill="none" stroke="#bbf7d0" strokeWidth="1" opacity="0.3" />
+              <path d="M0,130 Q50,150 100,130 T200,130" fill="none" stroke="#4ade80" strokeWidth="2.5" opacity="0.8" />
+              <path d="M25,170 Q75,190 125,170 T225,170" fill="none" stroke="#86efac" strokeWidth="2" opacity="0.7" />
+              <path d="M-15,110 Q35,130 85,110 T185,110" fill="none" stroke="#bbf7d0" strokeWidth="2" opacity="0.6" />
+              <path d="M5,40 Q55,60 105,40 T205,40" fill="none" stroke="#4ade80" strokeWidth="2" opacity="0.65" />
               
-              {/* Location pins */}
-              <circle cx="80" cy="80" r="4" fill="#fb923c" opacity="0.7" />
-              <circle cx="150" cy="100" r="3" fill="#60a5fa" opacity="0.6" />
-              <circle cx="120" cy="130" r="3.5" fill="#4ade80" opacity="0.6" />
-              <circle cx="50" cy="120" r="3" fill="#22d3ee" opacity="0.5" />
+              {/* Location pins - bigger */}
+              <circle cx="80" cy="80" r="5" fill="#fb923c" opacity="0.9" />
+              <circle cx="150" cy="100" r="4.5" fill="#60a5fa" opacity="0.85" />
+              <circle cx="120" cy="130" r="5" fill="#4ade80" opacity="0.85" />
+              <circle cx="50" cy="120" r="4" fill="#22d3ee" opacity="0.8" />
+              <circle cx="170" cy="60" r="4" fill="#fb923c" opacity="0.75" />
+              <circle cx="30" cy="150" r="3.5" fill="#60a5fa" opacity="0.75" />
               
-              {/* Small plane icons */}
-              <g transform="translate(100, 70) rotate(45)" opacity="0.5">
-                <path d="M0,-3 L2,0 L0,1 L-2,0 Z" fill="#fb923c" />
+              {/* Plane icons - bigger and more visible */}
+              <g transform="translate(100, 70) rotate(45)" opacity="0.75">
+                <path d="M0,-5 L3,0 L0,2 L-3,0 Z" fill="#fb923c" />
               </g>
-              <g transform="translate(140, 140) rotate(-30)" opacity="0.4">
-                <path d="M0,-3 L2,0 L0,1 L-2,0 Z" fill="#60a5fa" />
+              <g transform="translate(140, 140) rotate(-30)" opacity="0.7">
+                <path d="M0,-5 L3,0 L0,2 L-3,0 Z" fill="#60a5fa" />
+              </g>
+              <g transform="translate(65, 145) rotate(15)" opacity="0.65">
+                <path d="M0,-5 L3,0 L0,2 L-3,0 Z" fill="#4ade80" />
               </g>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#mapLines)" />
         </svg>
         
-        {/* Gradient overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-white/20"></div>
+        {/* Lighter gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10"></div>
       </div>
       
       <div className="w-full max-w-md relative z-10">
