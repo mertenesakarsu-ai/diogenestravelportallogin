@@ -11,6 +11,8 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [errors, setErrors] = useState({ email: "", password: "" })
+  const [emailFocused, setEmailFocused] = useState(false)
+  const [passwordFocused, setPasswordFocused] = useState(false)
 
   const validateForm = () => {
     const newErrors = { email: "", password: "" }
@@ -65,22 +67,22 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
           {/* Logo with colored circle */}
-          <div className="flex flex-col items-center mb-8">
-            <div className="relative w-28 h-28 mb-4">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 shadow-lg"></div>
-              <div className="absolute inset-1 rounded-full bg-white flex items-center justify-center">
+          <div className="flex flex-col items-center mb-6">
+            <div className="relative w-20 h-20 mb-3">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 shadow-md"></div>
+              <div className="absolute inset-[3px] rounded-full bg-white flex items-center justify-center">
                 <Image
                   src="/images/logo.png"
                   alt="Diogenes Logo"
-                  width={80}
-                  height={80}
-                  className="w-20 h-20 object-contain"
+                  width={56}
+                  height={56}
+                  className="w-14 h-14 object-contain"
                 />
               </div>
             </div>
 
-            <h1 className="text-2xl font-bold text-slate-900 text-center mb-1">Diogenes Travel Portal</h1>
-            <p className="text-slate-600 text-center text-sm">Seyahat Yönetim Sistemi</p>
+            <h1 className="text-xl font-bold text-slate-900 text-center mb-0.5">Diogenes Travel Portal</h1>
+            <p className="text-slate-500 text-center text-xs">Seyahat Yönetim Sistemi</p>
           </div>
 
           {/* Login Form */}
@@ -90,20 +92,28 @@ export default function LoginPage() {
               <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                 Email / Kullanıcı Adı
               </label>
-              <div className="relative">
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ornek@diogenestravel.com"
-                  className={`w-full px-4 py-3 rounded-lg border-2 transition-colors outline-none ${
-                    errors.email
-                      ? "border-red-500 bg-red-50 focus:bg-white"
-                      : "border-slate-300 focus:border-blue-500 focus:bg-blue-50"
-                  }`}
-                />
-                {errors.email && <AlertCircle className="absolute right-3 top-3.5 w-5 h-5 text-red-500" />}
+              <div
+                className={`relative rounded-lg transition-all duration-300 ${emailFocused ? "p-[2px] bg-gradient-to-r from-blue-500 via-orange-500 to-green-500 shadow-[0_0_15px_rgba(59,130,246,0.5),0_0_15px_rgba(249,115,22,0.3),0_0_15px_rgba(34,197,94,0.3)]" : "p-0"}`}
+              >
+                <div className="relative">
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => setEmailFocused(true)}
+                    onBlur={() => setEmailFocused(false)}
+                    placeholder="ornek@diogenestravel.com"
+                    className={`w-full px-4 py-3 rounded-lg border-2 transition-colors outline-none ${
+                      errors.email
+                        ? "border-red-500 bg-red-50"
+                        : emailFocused
+                          ? "border-transparent bg-white"
+                          : "border-slate-300 bg-white"
+                    }`}
+                  />
+                  {errors.email && <AlertCircle className="absolute right-3 top-3.5 w-5 h-5 text-red-500" />}
+                </div>
               </div>
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
@@ -113,26 +123,34 @@ export default function LoginPage() {
               <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
                 Şifre
               </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className={`w-full px-4 py-3 rounded-lg border-2 transition-colors outline-none ${
-                    errors.password
-                      ? "border-red-500 bg-red-50 focus:bg-white"
-                      : "border-slate-300 focus:border-blue-500 focus:bg-blue-50"
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3.5 text-slate-500 hover:text-slate-700"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
+              <div
+                className={`relative rounded-lg transition-all duration-300 ${passwordFocused ? "p-[2px] bg-gradient-to-r from-blue-500 via-orange-500 to-green-500 shadow-[0_0_15px_rgba(59,130,246,0.5),0_0_15px_rgba(249,115,22,0.3),0_0_15px_rgba(34,197,94,0.3)]" : "p-0"}`}
+              >
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
+                    placeholder="••••••••"
+                    className={`w-full px-4 py-3 rounded-lg border-2 transition-colors outline-none ${
+                      errors.password
+                        ? "border-red-500 bg-red-50"
+                        : passwordFocused
+                          ? "border-transparent bg-white"
+                          : "border-slate-300 bg-white"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3.5 text-slate-500 hover:text-slate-700"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
               </div>
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
@@ -143,17 +161,16 @@ export default function LoginPage() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 accent-orange-500 border-slate-300 rounded focus:ring-orange-500"
               />
               <label htmlFor="rememberMe" className="ml-2 text-sm text-slate-600">
                 Beni hatırla
               </label>
             </div>
 
-            {/* Login Button */}
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-gradient-to-r from-blue-500 via-orange-500 to-green-500 text-white font-semibold rounded-lg hover:shadow-[0_0_20px_rgba(59,130,246,0.4),0_0_20px_rgba(249,115,22,0.3),0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
             >
               Giriş Yap
             </button>
