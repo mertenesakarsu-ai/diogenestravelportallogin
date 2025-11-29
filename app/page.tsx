@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
   const [errors, setErrors] = useState({ email: "", password: "" })
 
   const validateForm = () => {
@@ -48,6 +49,9 @@ export default function LoginPage() {
     if (mockUsers[email] === password) {
       localStorage.setItem("isLoggedIn", "true")
       localStorage.setItem("userEmail", email)
+      if (rememberMe) {
+        localStorage.setItem("rememberMe", "true")
+      }
       alert(`Hoş geldiniz! ${email}`)
       setEmail("")
       setPassword("")
@@ -59,27 +63,27 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo with colored circle */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="relative w-32 h-32 mb-6">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 shadow-lg"></div>
-            <div className="absolute inset-1 rounded-full bg-white flex items-center justify-center">
-              <Image
-                src="/images/logo.png"
-                alt="Diogenes Logo"
-                width={96}
-                height={96}
-                className="w-24 h-24 object-contain"
-              />
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+          {/* Logo with colored circle */}
+          <div className="flex flex-col items-center mb-8">
+            <div className="relative w-28 h-28 mb-4">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 shadow-lg"></div>
+              <div className="absolute inset-1 rounded-full bg-white flex items-center justify-center">
+                <Image
+                  src="/images/logo.png"
+                  alt="Diogenes Logo"
+                  width={80}
+                  height={80}
+                  className="w-20 h-20 object-contain"
+                />
+              </div>
             </div>
+
+            <h1 className="text-2xl font-bold text-slate-900 text-center mb-1">Diogenes Travel Portal</h1>
+            <p className="text-slate-600 text-center text-sm">Seyahat Yönetim Sistemi</p>
           </div>
 
-          <h1 className="text-3xl font-bold text-slate-900 text-center mb-1">Diogenes Travel Portal</h1>
-          <p className="text-slate-600 text-center">Seyahat Yönetim Sistemi</p>
-        </div>
-
-        {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email Field */}
             <div>
@@ -133,6 +137,19 @@ export default function LoginPage() {
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
 
+            <div className="flex items-center">
+              <input
+                id="rememberMe"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+              />
+              <label htmlFor="rememberMe" className="ml-2 text-sm text-slate-600">
+                Beni hatırla
+              </label>
+            </div>
+
             {/* Login Button */}
             <button
               type="submit"
@@ -141,17 +158,6 @@ export default function LoginPage() {
               Giriş Yap
             </button>
           </form>
-
-          {/* Demo Info */}
-          <div className="mt-6 pt-6 border-t border-slate-200">
-            <p className="text-xs text-slate-500 text-center mb-3 font-medium">Demo Kredileri:</p>
-            <div className="space-y-2 text-xs text-slate-600">
-              <p>📧 reservation@diogenestravel.com / reservation123</p>
-              <p>✈️ ucak@diogenestravel.com / uçak123</p>
-              <p>⚙️ operations@diogenestravel.com / operations123</p>
-              <p>👔 management@diogenestravel.com / management123</p>
-            </div>
-          </div>
         </div>
 
         {/* Footer */}
