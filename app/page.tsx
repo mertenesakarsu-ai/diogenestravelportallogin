@@ -33,32 +33,48 @@ export default function LoginPage() {
     return !newErrors.email && !newErrors.password
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) {
       return
     }
 
-    // Mock login
-    const mockUsers: { [key: string]: string } = {
-      "reservation@diogenestravel.com": "reservation123",
-      "ucak@diogenestravel.com": "uçak123",
-      "operations@diogenestravel.com": "operations123",
-      "management@diogenestravel.com": "management123",
-    }
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
 
-    if (mockUsers[email] === password) {
-      localStorage.setItem("isLoggedIn", "true")
-      localStorage.setItem("userEmail", email)
+      const data = await response.json()
+
+      if (!response.ok) {
+        setErrors({ ...errors, password: data.error || "Email veya şifre yanlış" })
+        return
+      }
+
+      // Store auth data
+      localStorage.setItem("auth_token", data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
       if (rememberMe) {
         localStorage.setItem("rememberMe", "true")
       }
-      alert(`Hoş geldiniz! ${email}`)
-      setEmail("")
-      setPassword("")
-    } else {
-      setErrors({ ...errors, password: "Email veya şifre yanlış" })
+
+      // Role-based redirect
+      const { role, department } = data.user
+      if (role === "admin") {
+        window.location.href = "/admin/dashboard"
+      } else if (department === "travel_agent") {
+        window.location.href = "/dashboard"
+      } else {
+        window.location.href = `/dashboard/${department}`
+      }
+    } catch (error) {
+      console.error("Login error:", error)
+      setErrors({ ...errors, password: "Giriş işlemi başarısız oldu" })
     }
   }
 
