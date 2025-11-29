@@ -25,7 +25,6 @@ import {
   DollarSign,
   Ticket,
   BarChart3,
-  ArrowRight,
 } from "lucide-react"
 
 // ==================== RESERVATIONS DASHBOARD ====================
@@ -696,241 +695,238 @@ function ManagementDashboard({ user, onLogout }: { user: any; onLogout: () => vo
 
 // ==================== LOGIN PAGE ====================
 export default function LoginPage() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [formData, setFormData] = useState({ email: "", password: "" })
-  const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState({ email: "", password: "", form: "" })
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [loggedInUser, setLoggedInUser] = useState<any>(null)
 
-  const mockUsers = [
-    {
-      email: "admin@diogenestravel.com",
-      password: "admin123",
-      role: "admin",
-      name: "Sistem Yöneticisi",
-      department: "management",
-    },
-    {
-      email: "reservation@diogenestravel.com",
-      password: "reservation123",
-      role: "user",
-      name: "Rezervasyon Sorumlusu",
-      department: "reservation",
-    },
-    {
-      email: "ucak@diogenestravel.com",
-      password: "uçak123",
-      role: "user",
-      name: "Uçak Müdürü",
-      department: "aircraft",
-    },
-    {
-      email: "operations@diogenestravel.com",
-      password: "operations123",
-      role: "user",
-      name: "Operasyon Müdürü",
-      department: "operations",
-    },
-    {
-      email: "management@diogenestravel.com",
-      password: "management123",
-      role: "user",
-      name: "Yönetim Müdürü",
-      department: "management",
-    },
-  ]
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-    if (errors[name as keyof typeof errors]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }))
-    }
-  }
-
   const validateForm = () => {
-    const newErrors = { email: "", password: "", form: "" }
-    let isValid = true
+    const newErrors: { email?: string; password?: string } = {}
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email alanı boş olamaz"
-      isValid = false
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Geçerli bir email adresi girin"
-      isValid = false
+    if (!email.trim()) {
+      newErrors.email = "Email boş olamaz"
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Geçerli bir email girin"
     }
 
-    if (!formData.password.trim()) {
-      newErrors.password = "Şifre alanı boş olamaz"
-      isValid = false
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Şifre en az 6 karakter olmalıdır"
-      isValid = false
+    if (!password.trim()) {
+      newErrors.password = "Şifre boş olamaz"
+    } else if (password.length < 6) {
+      newErrors.password = "Şifre en az 6 karakter olmalı"
     }
 
     setErrors(newErrors)
-    return isValid
+    return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!validateForm()) {
-      return
+    if (!validateForm()) return
+
+    const mockUsers = [
+      {
+        email: "reservation@diogenestravel.com",
+        password: "reservation123",
+        role: "Reservation",
+        name: "Rezervasyon Departmanı",
+        department: "reservation",
+      },
+      {
+        email: "ucak@diogenestravel.com",
+        password: "uçak123",
+        role: "Aircraft",
+        name: "Uçak Departmanı",
+        department: "aircraft",
+      },
+      {
+        email: "operations@diogenestravel.com",
+        password: "operations123",
+        role: "Operations",
+        name: "Operasyon Departmanı",
+        department: "operations",
+      },
+      {
+        email: "management@diogenestravel.com",
+        password: "management123",
+        role: "Management",
+        name: "Yönetim Departmanı",
+        department: "management",
+      },
+      {
+        email: "admin@diogenestravel.com",
+        password: "admin123",
+        role: "Admin",
+        name: "Admin Kullanıcı",
+        department: "management",
+      },
+    ]
+
+    const user = mockUsers.find((u) => u.email === email && u.password === password)
+
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user))
+      setLoggedInUser(user)
+      setIsLoggedIn(true)
+    } else {
+      setErrors({ email: "Email veya şifre yanlış" })
     }
-
-    setIsLoading(true)
-
-    setTimeout(() => {
-      const user = mockUsers.find((u) => u.email === formData.email && u.password === formData.password)
-
-      if (!user) {
-        setErrors((prev) => ({ ...prev, form: "Email veya şifre hatalı" }))
-        setIsLoading(false)
-        return
-      }
-
-      setLoggedInUser({
-        id: Math.random().toString(36).substr(2, 9),
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        department: user.department,
-      })
-    }, 800)
   }
 
-  if (loggedInUser) {
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+    setLoggedInUser(null)
+    setEmail("")
+    setPassword("")
+    setErrors({})
+    localStorage.removeItem("user")
+  }
+
+  if (isLoggedIn && loggedInUser) {
     if (loggedInUser.department === "reservation") {
-      return <ReservationsDashboard user={loggedInUser} onLogout={() => setLoggedInUser(null)} />
+      return <ReservationsDashboard user={loggedInUser} onLogout={handleLogout} />
     } else if (loggedInUser.department === "aircraft") {
-      return <AircraftDashboard user={loggedInUser} onLogout={() => setLoggedInUser(null)} />
+      return <AircraftDashboard user={loggedInUser} onLogout={handleLogout} />
     } else if (loggedInUser.department === "operations") {
-      return <OperationsDashboard user={loggedInUser} onLogout={() => setLoggedInUser(null)} />
+      return <OperationsDashboard user={loggedInUser} onLogout={handleLogout} />
     } else {
-      return <ManagementDashboard user={loggedInUser} onLogout={() => setLoggedInUser(null)} />
+      return <ManagementDashboard user={loggedInUser} onLogout={handleLogout} />
     }
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-background via-background to-background flex flex-col">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-green-500/5 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center p-4 relative overflow-hidden">
+      <div
+        className="absolute top-20 right-20 w-72 h-72 rounded-full opacity-20 blur-3xl animate-glow"
+        style={{
+          background: "conic-gradient(from 0deg, #3B82F6, #F97316, #22C55E, #3B82F6)",
+        }}
+      />
 
-      <div className="flex-1 flex items-center justify-center px-4 py-8 relative z-10">
-        <div className="w-full max-w-md">
-          <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700/50 p-8 space-y-8">
-            {/* Logo Section */}
-            <div className="flex flex-col items-center space-y-4">
-              <div className="relative w-24 h-24 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 opacity-20 blur-xl" />
-                <div className="relative bg-white dark:bg-slate-900 rounded-full w-20 h-20 flex items-center justify-center shadow-lg">
-                  <Image src="/images/logo.png" alt="Logo" width={48} height={48} className="object-contain" />
-                </div>
-              </div>
-              <div className="text-center">
-                <h1 className="text-2xl font-bold text-foreground">Diogenes Travel Portal</h1>
-                <p className="text-sm text-muted-foreground mt-2">Seyahat Yönetim Sistemi</p>
+      <div
+        className="absolute bottom-20 left-10 w-96 h-96 rounded-full opacity-10 blur-3xl"
+        style={{
+          background: "conic-gradient(from 180deg, #22C55E, #F97316, #3B82F6, #22C55E)",
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-md">
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
+          {/* Logo and Title */}
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <Image
+                  src="/images/logo.png"
+                  alt="Diogenes Travel Portal"
+                  width={120}
+                  height={120}
+                  className="object-contain"
+                />
               </div>
             </div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Diogenes Travel Portal</h1>
+            <p className="text-slate-600 text-sm">Seyahat Yönetim Sistemi</p>
+          </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Email / Kullanıcı Adı</label>
-                <div className="relative">
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="example@diogenestravel.com"
-                    className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none ${
-                      errors.email
-                        ? "border-red-500 focus:ring-2 focus:ring-red-500/50"
-                        : "border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30"
-                    } bg-white dark:bg-slate-900 text-foreground placeholder-muted-foreground`}
-                  />
-                </div>
-                {errors.email && (
-                  <div className="flex items-center gap-2 mt-2 text-red-600 dark:text-red-400 text-sm">
-                    <AlertCircle size={16} />
-                    <span>{errors.email}</span>
-                  </div>
-                )}
-              </div>
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <h2 className="text-xl font-bold text-slate-900 mb-6">Giriş Yap</h2>
 
-              {/* Password */}
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">Şifre</label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Şifrenizi girin"
-                    className={`w-full px-4 py-3 pr-12 rounded-lg border-2 transition-all focus:outline-none ${
-                      errors.password
-                        ? "border-red-500 focus:ring-2 focus:ring-red-500/50"
-                        : "border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30"
-                    } bg-white dark:bg-slate-900 text-foreground placeholder-muted-foreground`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </button>
-                </div>
-                {errors.password && (
-                  <div className="flex items-center gap-2 mt-2 text-red-600 dark:text-red-400 text-sm">
-                    <AlertCircle size={16} />
-                    <span>{errors.password}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Form Error */}
-              {errors.form && (
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
-                  <AlertCircle size={18} className="flex-shrink-0" />
-                  <span>{errors.form}</span>
+            {/* Email Field */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Email / Kullanıcı Adı</label>
+              <input
+                type="email"
+                placeholder="example@diogenestravel.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none ${
+                  errors.email
+                    ? "border-red-500 bg-red-50 focus:ring-2 focus:ring-red-500/20"
+                    : "border-slate-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                }`}
+              />
+              {errors.email && (
+                <div className="flex items-center gap-2 mt-2 text-red-600 text-sm">
+                  <AlertCircle size={16} />
+                  <span>{errors.email}</span>
                 </div>
               )}
+            </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Giriş yapılıyor...
-                  </>
-                ) : (
-                  <>
-                    <span>Giriş Yap</span>
-                    <ArrowRight size={18} />
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
+            {/* Password Field */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Şifre</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none pr-12 ${
+                    errors.password
+                      ? "border-red-500 bg-red-50 focus:ring-2 focus:ring-red-500/20"
+                      : "border-slate-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {errors.password && (
+                <div className="flex items-center gap-2 mt-2 text-red-600 text-sm">
+                  <AlertCircle size={16} />
+                  <span>{errors.password}</span>
+                </div>
+              )}
+            </div>
 
-          {/* Footer */}
-          <div className="text-center mt-8 text-sm text-muted-foreground">
-            <p>© 2025 Diogenes Travel Portal • Tüm Hakları Saklıdır</p>
-          </div>
+            {/* Remember Me */}
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" className="w-4 h-4 rounded border-slate-300" />
+              <span className="text-sm text-slate-600">Beni hatırla</span>
+            </label>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-3 mt-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
+            >
+              Giriş Yap
+            </button>
+          </form>
         </div>
+
+        {/* Footer */}
+        <p className="text-center text-sm text-slate-500 mt-6">© 2025 Diogenes Travel. Tüm hakları saklıdır.</p>
       </div>
-    </main>
+    </div>
+  )
+}
+
+// Dashboard component used after successful login
+function Dashboard({ user, onLogout }: { user: any; onLogout: () => void }) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2">Dashboard</h1>
+          <p className="text-slate-400">Hoş geldiniz, {user.name}</p>
+        </div>
+        <button
+          onClick={onLogout}
+          className="mx-auto block px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+        >
+          Çıkış Yap
+        </button>
+      </div>
+    </div>
   )
 }
