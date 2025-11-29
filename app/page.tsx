@@ -170,9 +170,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-blue-500 via-orange-500 to-green-500 text-white font-semibold rounded-lg hover:shadow-[0_0_20px_rgba(59,130,246,0.4),0_0_20px_rgba(249,115,22,0.3),0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
+              className="relative w-full py-4 bg-gradient-to-r from-blue-500 via-orange-500 to-green-500 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-[0_0_30px_rgba(59,130,246,0.6),0_0_30px_rgba(249,115,22,0.5),0_0_30px_rgba(34,197,94,0.5)] hover:scale-[1.02] transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 overflow-hidden group"
             >
-              Giriş Yap
+              <span className="relative z-10">Giriş Yap</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500 via-blue-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </button>
           </form>
         </div>
