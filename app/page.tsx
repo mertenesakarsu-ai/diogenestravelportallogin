@@ -80,8 +80,54 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+      {/* Animated Map Background - like in the image */}
+      <div className="absolute inset-0 bg-white">
+        <svg className="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="mapLines" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+              {/* Orange paths */}
+              <path d="M0,80 Q50,60 100,80 T200,80" fill="none" stroke="#fb923c" strokeWidth="2" opacity="0.6" />
+              <path d="M20,120 Q70,100 120,120 T220,120" fill="none" stroke="#fb923c" strokeWidth="1.5" opacity="0.5" />
+              <path d="M-20,50 Q30,30 80,50 T180,50" fill="none" stroke="#fdba74" strokeWidth="1" opacity="0.4" />
+              
+              {/* Blue paths */}
+              <path d="M0,100 Q50,120 100,100 T200,100" fill="none" stroke="#60a5fa" strokeWidth="2" opacity="0.6" />
+              <path d="M30,140 Q80,160 130,140 T230,140" fill="none" stroke="#60a5fa" strokeWidth="1.5" opacity="0.5" />
+              <path d="M-10,70 Q40,90 90,70 T190,70" fill="none" stroke="#93c5fd" strokeWidth="1" opacity="0.4" />
+              
+              {/* Cyan/Turquoise paths */}
+              <path d="M10,60 Q60,40 110,60 T210,60" fill="none" stroke="#22d3ee" strokeWidth="2" opacity="0.5" />
+              <path d="M40,100 Q90,80 140,100 T240,100" fill="none" stroke="#67e8f9" strokeWidth="1.5" opacity="0.4" />
+              
+              {/* Green paths */}
+              <path d="M0,130 Q50,150 100,130 T200,130" fill="none" stroke="#4ade80" strokeWidth="2" opacity="0.5" />
+              <path d="M25,170 Q75,190 125,170 T225,170" fill="none" stroke="#86efac" strokeWidth="1.5" opacity="0.4" />
+              <path d="M-15,110 Q35,130 85,110 T185,110" fill="none" stroke="#bbf7d0" strokeWidth="1" opacity="0.3" />
+              
+              {/* Location pins */}
+              <circle cx="80" cy="80" r="4" fill="#fb923c" opacity="0.7" />
+              <circle cx="150" cy="100" r="3" fill="#60a5fa" opacity="0.6" />
+              <circle cx="120" cy="130" r="3.5" fill="#4ade80" opacity="0.6" />
+              <circle cx="50" cy="120" r="3" fill="#22d3ee" opacity="0.5" />
+              
+              {/* Small plane icons */}
+              <g transform="translate(100, 70) rotate(45)" opacity="0.5">
+                <path d="M0,-3 L2,0 L0,1 L-2,0 Z" fill="#fb923c" />
+              </g>
+              <g transform="translate(140, 140) rotate(-30)" opacity="0.4">
+                <path d="M0,-3 L2,0 L0,1 L-2,0 Z" fill="#60a5fa" />
+              </g>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#mapLines)" />
+        </svg>
+        
+        {/* Gradient overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-white/20"></div>
+      </div>
+      
+      <div className="w-full max-w-md relative z-10">
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
           {/* Logo with colored circle */}
           <div className="flex flex-col items-center mb-6">
