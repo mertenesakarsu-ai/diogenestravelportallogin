@@ -147,27 +147,52 @@ export default function AdminDashboard() {
         </div>
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          {[
-            { icon: BarChart3, label: "Dashboard", active: true },
-            { icon: BookOpen, label: "Rezervasyonlar" },
-            { icon: Plane, label: "Uçak Yönetimi" },
-            { icon: Cog, label: "Operasyon" },
-            { icon: Users, label: "Yönetim" },
-            { icon: Users, label: "Kullanıcılar" },
-          ].map((item, idx) => (
-            <button
-              key={idx}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                item.active
-                  ? "bg-primary text-primary-foreground shadow-md"
-                  : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
-              }`}
-              title={!sidebarOpen ? item.label : undefined}
-            >
-              <item.icon size={20} className="flex-shrink-0" />
-              {sidebarOpen && <span className="text-sm font-medium">{item.label}</span>}
-            </button>
-          ))}
+          <button
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all bg-primary text-primary-foreground shadow-md"
+            title={!sidebarOpen ? "Dashboard" : undefined}
+          >
+            <BarChart3 size={20} className="flex-shrink-0" />
+            {sidebarOpen && <span className="text-sm font-medium">Dashboard</span>}
+          </button>
+          <button
+            onClick={() => router.push("/reservations")}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+            title={!sidebarOpen ? "Rezervasyonlar" : undefined}
+          >
+            <BookOpen size={20} className="flex-shrink-0" />
+            {sidebarOpen && <span className="text-sm font-medium">Rezervasyonlar</span>}
+          </button>
+          <button
+            onClick={() => router.push("/flights")}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+            title={!sidebarOpen ? "Uçak Yönetimi" : undefined}
+          >
+            <Plane size={20} className="flex-shrink-0" />
+            {sidebarOpen && <span className="text-sm font-medium">Uçak Yönetimi</span>}
+          </button>
+          <button
+            onClick={() => router.push("/hotels")}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+            title={!sidebarOpen ? "Oteller" : undefined}
+          >
+            <BookOpen size={20} className="flex-shrink-0" />
+            {sidebarOpen && <span className="text-sm font-medium">Oteller & Kontratlar</span>}
+          </button>
+          <button
+            onClick={() => router.push("/operations")}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+            title={!sidebarOpen ? "Operasyon" : undefined}
+          >
+            <Cog size={20} className="flex-shrink-0" />
+            {sidebarOpen && <span className="text-sm font-medium">Operasyon</span>}
+          </button>
+          <button
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+            title={!sidebarOpen ? "Kullanıcılar" : undefined}
+          >
+            <Users size={20} className="flex-shrink-0" />
+            {sidebarOpen && <span className="text-sm font-medium">Kullanıcılar</span>}
+          </button>
         </nav>
 
         <div className="p-4 border-t border-border space-y-3">
