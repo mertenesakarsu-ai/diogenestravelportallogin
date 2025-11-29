@@ -68,21 +68,21 @@ export default function LoginPage() {
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
           {/* Logo with colored circle */}
           <div className="flex flex-col items-center mb-6">
-            <div className="relative w-20 h-20 mb-3">
+            <div className="relative w-28 h-28 mb-3">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 shadow-md"></div>
               <div className="absolute inset-[3px] rounded-full bg-white flex items-center justify-center">
                 <Image
                   src="/images/logo.png"
                   alt="Diogenes Logo"
-                  width={56}
-                  height={56}
-                  className="w-14 h-14 object-contain"
+                  width={80}
+                  height={80}
+                  className="w-20 h-20 object-contain"
                 />
               </div>
             </div>
 
             <h1 className="text-3xl font-bold text-slate-900 text-center mb-0.5">Diogenes Travel Portal</h1>
-            <p className="text-slate-500 text-center text-xs">Seyahat Yönetim Sistemi</p>
+            <p className="text-slate-500 text-center text-sm">Seyahat Yönetim Sistemi</p>
           </div>
 
           {/* Login Form */}
