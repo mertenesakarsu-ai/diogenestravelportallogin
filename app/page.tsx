@@ -128,7 +128,7 @@ export default function LoginPage() {
       </div>
       
       <div className="w-full max-w-md relative z-10">
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200/50 p-8">
           {/* Logo with colored circle */}
           <div className="flex flex-col items-center mb-6">
             <div className="relative w-28 h-28 mb-3">
