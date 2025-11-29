@@ -49,12 +49,13 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       })
 
-      const data = await response.json()
-
       if (!response.ok) {
+        const data = await response.json()
         setErrors({ ...errors, password: data.error || "Email veya şifre yanlış" })
         return
       }
+
+      const data = await response.json()
 
       // Store auth data
       localStorage.setItem("auth_token", data.token)
