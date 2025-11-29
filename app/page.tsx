@@ -171,7 +171,7 @@ export default function LoginPage() {
             <div className="relative rounded-xl transition-all duration-300 p-[2px] bg-transparent hover:bg-gradient-to-r hover:from-blue-500 hover:via-orange-500 hover:to-green-500 hover:shadow-[0_0_15px_rgba(59,130,246,0.5),0_0_15px_rgba(249,115,22,0.3),0_0_15px_rgba(34,197,94,0.3)] group">
               <button
                 type="submit"
-                className="w-full py-4 bg-black hover:bg-slate-700 text-white font-bold text-lg rounded-xl transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
+                className="w-full py-4 bg-black text-white font-bold text-lg rounded-xl transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
               >
                 Giriş Yap
               </button>
