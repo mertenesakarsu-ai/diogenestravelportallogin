@@ -10,14 +10,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState({ email: "", password: "" })
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [user, setUser] = useState<any>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const validateForm = () => {
     const newErrors = { email: "", password: "" }
 
-    if (!email) {
+    if (!email.trim()) {
       newErrors.email = "Email boş olamaz"
     } else if (!email.includes("@")) {
       newErrors.email = "Geçerli bir email girin"
@@ -25,186 +22,140 @@ export default function LoginPage() {
 
     if (!password) {
       newErrors.password = "Şifre boş olamaz"
-    } else if (password.length < 6) {
-      newErrors.password = "Şifre en az 6 karakter olmalı"
+    } else if (password.length < 3) {
+      newErrors.password = "Şifre en az 3 karakter olmalı"
     }
 
-    if (newErrors.email || newErrors.password) {
-      setErrors(newErrors)
+    setErrors(newErrors)
+    return !newErrors.email && !newErrors.password
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!validateForm()) {
       return
     }
 
-    // Mock authentication
-    const mockUsers: { [key: string]: any } = {
-      "reservation@diogenestravel.com": {
-        name: "Rezervasyon Departmanı",
-        role: "reservation",
-        email: "reservation@diogenestravel.com",
-      },
-      "ucak@diogenestravel.com": {
-        name: "Uçak Departmanı",
-        role: "aircraft",
-        email: "ucak@diogenestravel.com",
-      },
-      "operations@diogenestravel.com": {
-        name: "Operasyon Departmanı",
-        role: "operations",
-        email: "operations@diogenestravel.com",
-      },
-      "management@diogenestravel.com": {
-        name: "Yönetim Departmanı",
-        role: "management",
-        email: "management@diogenestravel.com",
-      },
+    // Mock login
+    const mockUsers: { [key: string]: string } = {
+      "reservation@diogenestravel.com": "reservation123",
+      "ucak@diogenestravel.com": "uçak123",
+      "operations@diogenestravel.com": "operations123",
+      "management@diogenestravel.com": "management123",
     }
 
-    if (mockUsers[email] && password.endsWith("123")) {
-      setUser(mockUsers[email])
-      setIsLoggedIn(true)
-      localStorage.setItem("user", JSON.stringify(mockUsers[email]))
-      setErrors({ email: "", password: "" })
+    if (mockUsers[email] === password) {
+      localStorage.setItem("isLoggedIn", "true")
+      localStorage.setItem("userEmail", email)
+      alert(`Hoş geldiniz! ${email}`)
+      setEmail("")
+      setPassword("")
     } else {
-      setErrors({ email: "", password: "Email veya şifre yanlış" })
+      setErrors({ ...errors, password: "Email veya şifre yanlış" })
     }
-  }
-
-  const handleLogout = () => {
-    setIsLoggedIn(false)
-    setUser(null)
-    setEmail("")
-    setPassword("")
-    localStorage.removeItem("user")
-  }
-
-  if (isLoggedIn && user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 border border-blue-100 text-center">
-            <div className="inline-block w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center mb-6">
-              <span className="text-3xl text-white">✓</span>
-            </div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Giriş Başarılı!</h1>
-            <p className="text-slate-600 mb-4">{user.name}</p>
-            <p className="text-sm text-slate-500 mb-8">{user.email}</p>
-
-            <div className="bg-blue-50 rounded-lg p-4 mb-6 border border-blue-200">
-              <p className="text-sm text-slate-700">
-                <strong>Not:</strong> Departman paneli henüz geliştirilme aşamasındadır. Tarafından eklendi.
-              </p>
-            </div>
-
-            <button
-              onClick={handleLogout}
-              className="w-full py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all active:scale-95"
-            >
-              Çıkış Yap
-            </button>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo and Title */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-6 relative">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-40 h-40 bg-gradient-to-r from-blue-400 via-orange-400 to-green-400 rounded-full opacity-30 blur-2xl animate-pulse"></div>
-            </div>
-            <div className="relative">
+        {/* Logo with colored circle */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="relative w-32 h-32 mb-6">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 shadow-lg"></div>
+            <div className="absolute inset-1 rounded-full bg-white flex items-center justify-center">
               <Image
                 src="/images/logo.png"
-                alt="Diogenes Travel Portal"
-                width={120}
-                height={120}
-                className="object-contain"
+                alt="Diogenes Logo"
+                width={96}
+                height={96}
+                className="w-24 h-24 object-contain"
               />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Diogenes Travel Portal</h1>
-          <p className="text-slate-600 text-sm">Seyahat Yönetim Sistemi</p>
+
+          <h1 className="text-3xl font-bold text-slate-900 text-center mb-1">Diogenes Travel Portal</h1>
+          <p className="text-slate-600 text-center">Seyahat Yönetim Sistemi</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8 border border-blue-100">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
-            <h2 className="text-xl font-bold text-slate-900 mb-6">Giriş Yap</h2>
-
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Email / Kullanıcı Adı</label>
-              <input
-                type="email"
-                placeholder="example@diogenestravel.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none ${
-                  errors.email
-                    ? "border-red-500 bg-red-50 focus:ring-2 focus:ring-red-500/20"
-                    : "border-slate-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                }`}
-              />
-              {errors.email && (
-                <div className="flex items-center gap-2 mt-2 text-red-600 text-sm">
-                  <AlertCircle size={16} />
-                  <span>{errors.email}</span>
-                </div>
-              )}
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                Email / Kullanıcı Adı
+              </label>
+              <div className="relative">
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="ornek@diogenestravel.com"
+                  className={`w-full px-4 py-3 rounded-lg border-2 transition-colors outline-none ${
+                    errors.email
+                      ? "border-red-500 bg-red-50 focus:bg-white"
+                      : "border-slate-300 focus:border-blue-500 focus:bg-blue-50"
+                  }`}
+                />
+                {errors.email && <AlertCircle className="absolute right-3 top-3.5 w-5 h-5 text-red-500" />}
+              </div>
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 
             {/* Password Field */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Şifre</label>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+                Şifre
+              </label>
               <div className="relative">
                 <input
+                  id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none pr-12 ${
+                  placeholder="••••••••"
+                  className={`w-full px-4 py-3 rounded-lg border-2 transition-colors outline-none ${
                     errors.password
-                      ? "border-red-500 bg-red-50 focus:ring-2 focus:ring-red-500/20"
-                      : "border-slate-200 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                      ? "border-red-500 bg-red-50 focus:bg-white"
+                      : "border-slate-300 focus:border-blue-500 focus:bg-blue-50"
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-3.5 text-slate-500 hover:text-slate-700"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              {errors.password && (
-                <div className="flex items-center gap-2 mt-2 text-red-600 text-sm">
-                  <AlertCircle size={16} />
-                  <span>{errors.password}</span>
-                </div>
-              )}
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
 
-            {/* Remember Me */}
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" className="w-4 h-4 rounded border-slate-300" />
-              <span className="text-sm text-slate-600">Beni hatırla</span>
-            </label>
-
-            {/* Submit Button */}
+            {/* Login Button */}
             <button
               type="submit"
-              className="w-full py-3 mt-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
             >
               Giriş Yap
             </button>
           </form>
+
+          {/* Demo Info */}
+          <div className="mt-6 pt-6 border-t border-slate-200">
+            <p className="text-xs text-slate-500 text-center mb-3 font-medium">Demo Kredileri:</p>
+            <div className="space-y-2 text-xs text-slate-600">
+              <p>📧 reservation@diogenestravel.com / reservation123</p>
+              <p>✈️ ucak@diogenestravel.com / uçak123</p>
+              <p>⚙️ operations@diogenestravel.com / operations123</p>
+              <p>👔 management@diogenestravel.com / management123</p>
+            </div>
+          </div>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-slate-500 mt-6">© 2025 Diogenes Travel. Tüm hakları saklıdır.</p>
+        <p className="text-center text-slate-500 text-sm mt-6">© 2025 Diogenes Travel. Tüm hakları saklıdır.</p>
       </div>
     </div>
   )
