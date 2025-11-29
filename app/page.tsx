@@ -9,190 +9,327 @@ import {
   ArrowRight,
   AlertCircle,
   Menu,
+  X,
   LogOut,
   BarChart3,
   Users,
   Plane,
   Calendar,
-  Settings,
+  TrendingUp,
+  TrendingDown,
+  CheckCircle2,
+  Clock,
+  MapPin,
+  DollarSign,
+  ArrowUpRight,
 } from "lucide-react"
 
-function AdminDashboard({ user, onLogout }: { user: any; onLogout: () => void }) {
-  const [activeTab, setActiveTab] = useState("overview")
+function ModernDashboard({ user, onLogout }: { user: any; onLogout: () => void }) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [activeSection, setActiveSection] = useState("overview")
 
-  const departments = [
-    { id: "reservation", name: "Rezervasyon", icon: Calendar, color: "from-blue-500 to-blue-600" },
-    { id: "aircraft", name: "Uçak", icon: Plane, color: "from-orange-500 to-orange-600" },
-    { id: "operations", name: "Operasyon", icon: BarChart3, color: "from-green-500 to-green-600" },
-    { id: "management", name: "Yönetim", icon: Users, color: "from-purple-500 to-purple-600" },
+  const departmentConfig: Record<string, any> = {
+    reservation: {
+      title: "Rezervasyon Yönetimi",
+      color: "from-blue-500 to-blue-600",
+      icon: Calendar,
+      metrics: [
+        { label: "Aktif Rezervasyon", value: "2,847", change: "+12%", trend: "up", icon: CheckCircle2 },
+        { label: "Bekleme Listesi", value: "423", change: "+5%", trend: "up", icon: Clock },
+        { label: "İptal Oranı", value: "3.2%", change: "-2%", trend: "down", icon: TrendingDown },
+        { label: "Gelir", value: "$185.2K", change: "+23%", trend: "up", icon: DollarSign },
+      ],
+    },
+    aircraft: {
+      title: "Uçak Yönetimi",
+      color: "from-orange-500 to-orange-600",
+      icon: Plane,
+      metrics: [
+        { label: "Kayıtlı Uçak", value: "156", change: "+8%", trend: "up", icon: Plane },
+        { label: "Aktif Uçak", value: "142", change: "+3%", trend: "up", icon: CheckCircle2 },
+        { label: "Bakım Yapılan", value: "14", change: "-1%", trend: "down", icon: TrendingDown },
+        { label: "Verimlilik", value: "94.5%", change: "+4%", trend: "up", icon: TrendingUp },
+      ],
+    },
+    operations: {
+      title: "Operasyon Yönetimi",
+      color: "from-green-500 to-green-600",
+      icon: BarChart3,
+      metrics: [
+        { label: "Planlanan Seferler", value: "423", change: "+15%", trend: "up", icon: MapPin },
+        { label: "Tamamlanan", value: "412", change: "+12%", trend: "up", icon: CheckCircle2 },
+        { label: "Geciken Seferler", value: "11", change: "-5%", trend: "down", icon: TrendingDown },
+        { label: "Memnuniyet", value: "4.8/5", change: "+0.3", trend: "up", icon: TrendingUp },
+      ],
+    },
+    management: {
+      title: "Yönetim Paneli",
+      color: "from-purple-500 to-purple-600",
+      icon: Users,
+      metrics: [
+        { label: "Toplam Kullanıcı", value: "5,234", change: "+12%", trend: "up", icon: Users },
+        { label: "Aktif Oturumlar", value: "842", change: "+8%", trend: "up", icon: CheckCircle2 },
+        { label: "Sistem Uptime", value: "99.8%", change: "+0.1%", trend: "up", icon: TrendingUp },
+        { label: "Aylık Gelir", value: "$245.6K", change: "+18%", trend: "up", icon: DollarSign },
+      ],
+    },
+  }
+
+  const config = departmentConfig[user.department] || departmentConfig.management
+
+  const chartData = [
+    { month: "Ocak", value: 65, target: 75 },
+    { month: "Şub", value: 78, target: 75 },
+    { month: "Mar", value: 72, target: 75 },
+    { month: "Nisan", value: 85, target: 75 },
+    { month: "Mayıs", value: 92, target: 75 },
+    { month: "Haziran", value: 88, target: 75 },
+    { month: "Temmuz", value: 95, target: 75 },
+    { month: "Ağu", value: 87, target: 75 },
+    { month: "Eyl", value: 91, target: 75 },
+    { month: "Eki", value: 84, target: 75 },
+    { month: "Kas", value: 89, target: 75 },
+    { month: "Ara", value: 96, target: 75 },
   ]
 
-  const stats = [
-    { label: "Toplam Rezervasyon", value: "2,847", change: "+12%" },
-    { label: "Aktif Uçak", value: "156", change: "+5%" },
-    { label: "Planlanan Seferler", value: "423", change: "+8%" },
-    { label: "Toplam Gelir", value: "$185.2K", change: "+23%" },
-  ]
+  const maxValue = Math.max(...chartData.map((d) => Math.max(d.value, d.target)))
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-slate-900/5 flex">
       {/* Sidebar */}
       <div
-        className={`${sidebarOpen ? "w-64" : "w-20"} bg-card border-r border-border transition-all duration-300 flex flex-col`}
+        className={`${
+          sidebarOpen ? "w-72" : "w-20"
+        } bg-card/80 backdrop-blur-md border-r border-border transition-all duration-300 fixed h-screen z-40 flex flex-col shadow-xl`}
       >
-        <div className="p-4 border-b border-border">
+        <div className="p-6 border-b border-border/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">DT</span>
+            <div
+              className={`w-12 h-12 rounded-xl bg-gradient-to-br ${config.color} flex items-center justify-center shadow-lg flex-shrink-0`}
+            >
+              <Image src="/images/logo.png" alt="Logo" width={28} height={28} className="object-contain" />
             </div>
-            {sidebarOpen && <span className="font-bold text-foreground">Diogenes</span>}
+            {sidebarOpen && (
+              <div className="min-w-0">
+                <h1 className="font-bold text-foreground text-sm leading-tight">Diogenes</h1>
+                <p className="text-xs text-muted-foreground">Travel Portal</p>
+              </div>
+            )}
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {[
-            { id: "overview", label: "Genel Bakış", icon: BarChart3 },
-            { id: "departments", label: "Departmanlar", icon: Users },
-            { id: "analytics", label: "Analitikler", icon: BarChart3 },
-            { id: "settings", label: "Ayarlar", icon: Settings },
+            { id: "overview", icon: BarChart3, label: "Genel Bakış" },
+            { id: "analytics", icon: TrendingUp, label: "Analitics" },
+            { id: "schedule", icon: Calendar, label: "Takvim" },
+            { id: "reports", icon: BarChart3, label: "Raporlar" },
           ].map((item) => (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
-                activeTab === item.id
-                  ? "bg-blue-500/20 text-blue-600 dark:text-blue-400"
-                  : "text-muted-foreground hover:bg-muted"
+              onClick={() => setActiveSection(item.id)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                activeSection === item.id
+                  ? "bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-500/30"
+                  : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
               }`}
+              title={!sidebarOpen ? item.label : undefined}
             >
-              <item.icon size={20} />
+              <item.icon size={20} className="flex-shrink-0" />
               {sidebarOpen && <span className="text-sm font-medium">{item.label}</span>}
             </button>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-border/50 space-y-3">
+          {sidebarOpen && (
+            <div className="p-3 rounded-xl bg-gradient-to-br from-accent/50 to-accent/30 border border-border/50">
+              <p className="text-xs text-muted-foreground mb-1">Oturum Açık:</p>
+              <p className="text-sm font-semibold text-foreground truncate">{user.name}</p>
+              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+            </div>
+          )}
           <button
             onClick={onLogout}
-            className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors text-sm font-medium"
+            title={!sidebarOpen ? "Çıkış Yap" : undefined}
           >
-            <LogOut size={20} />
-            {sidebarOpen && <span className="text-sm font-medium">Çıkış Yap</span>}
+            <LogOut size={18} className="flex-shrink-0" />
+            {sidebarOpen && <span>Çıkış Yap</span>}
           </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        {/* Top Bar */}
-        <div className="bg-card border-b border-border px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 hover:bg-muted rounded-lg transition-colors"
-          >
-            <Menu size={20} className="text-foreground" />
-          </button>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <p className="font-semibold text-foreground">{user.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {user.role === "admin" ? "Sistem Yöneticisi" : user.department}
-              </p>
+      <main className={`flex-1 ${sidebarOpen ? "ml-72" : "ml-20"} transition-all duration-300 flex flex-col`}>
+        {/* Top Header */}
+        <header className="bg-card/80 backdrop-blur-md border-b border-border/50 sticky top-0 z-30 shadow-sm">
+          <div className="px-8 py-5 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 hover:bg-accent rounded-lg transition-colors"
+              >
+                {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">{config.title}</h2>
+                <p className="text-sm text-muted-foreground">Hoş geldiniz, {user.name}</p>
+              </div>
             </div>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-orange-500" />
+            <div className="flex items-center gap-3">
+              <div className="px-4 py-2 rounded-lg bg-accent text-sm font-medium text-foreground">🇹🇷 Türkçe</div>
+            </div>
           </div>
-        </div>
+        </header>
 
         {/* Content */}
-        <div className="p-6">
-          {activeTab === "overview" && (
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">Hoş geldiniz, {user.name}!</h1>
-                <p className="text-muted-foreground">Sisteme giriş yaptınız. Departmanları yönetebilirsiniz.</p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {stats.map((stat, idx) => (
-                  <div key={idx} className="bg-card border border-border rounded-lg p-6">
-                    <p className="text-muted-foreground text-sm font-medium mb-2">{stat.label}</p>
-                    <p className="text-3xl font-bold text-foreground">{stat.value}</p>
-                    <p className="text-green-600 text-sm font-medium mt-2">{stat.change}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {departments.map((dept) => {
-                  const Icon = dept.icon
-                  return (
-                    <div
-                      key={dept.id}
-                      className="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={`w-16 h-16 rounded-lg bg-gradient-to-br ${dept.color} flex items-center justify-center`}
-                        >
-                          <Icon size={32} className="text-white" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-foreground">{dept.name}</h3>
-                          <p className="text-sm text-muted-foreground">Departmanı yönet</p>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+        <div className="flex-1 overflow-auto">
+          <div className="p-8">
+            {/* Welcome Section */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-foreground mb-2">Bugünün Özeti</h3>
+              <p className="text-muted-foreground">
+                Departmanınıza ait tüm metrikler ve performans göstergeleri aşağıda sunulmaktadır.
+              </p>
             </div>
-          )}
 
-          {activeTab === "departments" && (
-            <div className="space-y-6">
-              <h1 className="text-3xl font-bold text-foreground">Departmanlar</h1>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {departments.map((dept) => {
-                  const Icon = dept.icon
-                  return (
-                    <div key={dept.id} className="bg-card border border-border rounded-lg p-6">
+            {/* KPI Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+              {config.metrics.map((metric: any, idx: number) => {
+                const Icon = metric.icon
+                const isPositive = metric.trend === "up"
+                return (
+                  <div
+                    key={idx}
+                    className="bg-card border border-border/50 rounded-2xl p-6 hover:border-border hover:shadow-lg transition-all duration-300 group cursor-pointer backdrop-blur-sm"
+                  >
+                    <div className="flex items-start justify-between mb-4">
                       <div
-                        className={`w-12 h-12 rounded-lg bg-gradient-to-br ${dept.color} flex items-center justify-center mb-4`}
+                        className={`w-14 h-14 rounded-xl bg-gradient-to-br ${config.color} flex items-center justify-center shadow-lg`}
                       >
-                        <Icon size={24} className="text-white" />
+                        <Icon size={28} className="text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-foreground mb-2">{dept.name}</h3>
-                      <p className="text-muted-foreground text-sm mb-4">Departman yönetim sistemi</p>
-                      <button className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
-                        Ayrıntılar
-                      </button>
+                      <div
+                        className={`flex items-center gap-1 text-sm font-bold ${isPositive ? "text-green-600" : "text-red-600"}`}
+                      >
+                        {isPositive ? <ArrowUpRight size={16} /> : <TrendingDown size={16} />}
+                        {metric.change}
+                      </div>
                     </div>
-                  )
-                })}
-              </div>
+                    <p className="text-xs text-muted-foreground mb-2 font-medium">{metric.label}</p>
+                    <p className="text-3xl font-bold text-foreground">{metric.value}</p>
+                  </div>
+                )
+              })}
             </div>
-          )}
 
-          {activeTab === "analytics" && (
-            <div className="space-y-6">
-              <h1 className="text-3xl font-bold text-foreground">Analitikler</h1>
-              <div className="bg-card border border-border rounded-lg p-6">
-                <p className="text-muted-foreground">Detaylı analiz ve raporlar burada gösterilecektir.</p>
-              </div>
-            </div>
-          )}
+            {/* Charts Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              {/* Main Chart */}
+              <div className="lg:col-span-2 bg-card border border-border/50 rounded-2xl p-8 backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground">Aylık Performans Trendi</h3>
+                    <p className="text-sm text-muted-foreground">Son 12 ayın verileri</p>
+                  </div>
+                  <select className="px-4 py-2 rounded-lg bg-accent text-foreground text-sm font-medium border border-border/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                    <option>Son 12 Ay</option>
+                    <option>Son 6 Ay</option>
+                    <option>Son 3 Ay</option>
+                  </select>
+                </div>
 
-          {activeTab === "settings" && (
-            <div className="space-y-6">
-              <h1 className="text-3xl font-bold text-foreground">Ayarlar</h1>
-              <div className="bg-card border border-border rounded-lg p-6">
-                <p className="text-muted-foreground">Sistem ayarlarını buradan yönetebilirsiniz.</p>
+                <div className="h-80 flex items-end justify-between gap-2 px-2 py-6 bg-gradient-to-b from-blue-50/30 to-blue-50/10 dark:from-blue-950/20 dark:to-blue-950/5 rounded-xl border border-blue-200/20 dark:border-blue-800/20">
+                  {chartData.map((data, idx) => (
+                    <div key={idx} className="flex-1 flex flex-col items-center gap-2 group">
+                      <div className="w-full flex flex-col items-center gap-1">
+                        {/* Target Line */}
+                        <div
+                          className="w-full bg-gradient-to-t from-orange-400/40 to-orange-300/20 rounded-t opacity-60 transition-all hover:opacity-100"
+                          style={{
+                            height: `${(data.target / maxValue) * 100}%`,
+                            minHeight: "2px",
+                          }}
+                        />
+                        {/* Value Bar */}
+                        <div
+                          className="w-full bg-gradient-to-t from-blue-500 via-blue-400 to-blue-300 rounded-t transition-all duration-200 hover:from-blue-600 hover:via-blue-500 hover:to-blue-400 hover:shadow-lg"
+                          style={{
+                            height: `${(data.value / maxValue) * 100}%`,
+                            minHeight: "12px",
+                          }}
+                        />
+                      </div>
+                      <div className="text-xs font-semibold text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {data.value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-start gap-6 mt-6 pt-4 border-t border-border/30">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-gradient-to-br from-blue-500 to-blue-400" />
+                    <span className="text-sm text-muted-foreground">Gerçek Değer</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-gradient-to-br from-orange-400 to-orange-300" />
+                    <span className="text-sm text-muted-foreground">Hedef</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column Stats */}
+              <div className="space-y-4">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 border border-blue-200/50 dark:border-blue-800/50 rounded-2xl p-6 hover:shadow-lg transition-all backdrop-blur-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <div
+                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${config.color} flex items-center justify-center`}
+                    >
+                      <TrendingUp size={24} className="text-white" />
+                    </div>
+                    <CheckCircle2 className="text-green-600" size={20} />
+                  </div>
+                  <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mb-2">Performans Hedefi</p>
+                  <p className="text-3xl font-bold text-foreground">92%</p>
+                  <p className="text-xs text-green-600 font-semibold mt-3">↑ Hedefi aştı</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 border border-purple-200/50 dark:border-purple-800/50 rounded-2xl p-6 hover:shadow-lg transition-all backdrop-blur-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                      <Users size={24} className="text-white" />
+                    </div>
+                    <CheckCircle2 className="text-green-600" size={20} />
+                  </div>
+                  <p className="text-sm font-medium text-purple-600 dark:text-purple-400 mb-2">Memnuniyet Oranı</p>
+                  <p className="text-3xl font-bold text-foreground">4.8/5</p>
+                  <p className="text-xs text-green-600 font-semibold mt-3">↑ Çok İyi</p>
+                </div>
+
+                <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border border-green-200/50 dark:border-green-800/50 rounded-2xl p-6 hover:shadow-lg transition-all backdrop-blur-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                      <CheckCircle2 size={24} className="text-white" />
+                    </div>
+                  </div>
+                  <p className="text-sm font-medium text-green-600 dark:text-green-400 mb-2">Sistem Durumu</p>
+                  <div className="flex items-center gap-2 mt-3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                    <p className="text-sm font-bold text-green-600">Optimum</p>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
+
+            {/* Footer Info */}
+            <div className="text-center text-xs text-muted-foreground">
+              <p>Son güncelleme: Bugün saat 14:30 • © 2025 Diogenes Travel Portal</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
@@ -232,6 +369,13 @@ export default function LoginPage() {
       role: "user",
       name: "Operasyon Müdürü",
       department: "operations",
+    },
+    {
+      email: "ucak@diogenestravel.com",
+      password: "uçak123",
+      role: "user",
+      name: "Uçak Yöneticisi",
+      department: "aircraft",
     },
     {
       email: "management@diogenestravel.com",
@@ -303,7 +447,7 @@ export default function LoginPage() {
   }
 
   if (loggedInUser) {
-    return <AdminDashboard user={loggedInUser} onLogout={() => setLoggedInUser(null)} />
+    return <ModernDashboard user={loggedInUser} onLogout={() => setLoggedInUser(null)} />
   }
 
   return (
@@ -318,7 +462,7 @@ export default function LoginPage() {
           <div className="bg-card rounded-2xl shadow-lg border border-border/50 backdrop-blur-sm p-8">
             <div className="mb-8 text-center">
               <div className="flex justify-center mb-6">
-                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 p-0.5 shadow-xl">
+                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-orange-500 to-green-500 p-0.5 shadow-xl animate-glow">
                   <div className="relative w-full h-full bg-background rounded-full flex items-center justify-center">
                     <Image
                       src="/images/logo.png"
