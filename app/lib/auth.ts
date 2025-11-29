@@ -24,6 +24,7 @@ export function verifyToken(token: string): UserPayload | null {
 
 export const DEPARTMENTS = {
   ADMIN: "admin",
+  TRAVEL_AGENT: "travel_agent",
   RESERVATION: "reservation",
   AIRCRAFT: "aircraft",
   OPERATIONS: "operations",
@@ -32,6 +33,7 @@ export const DEPARTMENTS = {
 
 export const DEPARTMENT_LABELS = {
   admin: "Yönetici",
+  travel_agent: "Travel Agent",
   reservation: "Rezarvasyon Departmanı",
   aircraft: "Uçak Departmanı",
   operations: "Operasyon Departmanı",
@@ -40,6 +42,7 @@ export const DEPARTMENT_LABELS = {
 
 export const PERMISSIONS = {
   admin: ["read_all", "write_all", "delete_all", "manage_users"],
+  travel_agent: ["read_own_groups", "write_own_groups", "view_hotels", "create_vouchers"],
   reservation: ["read_reservations", "write_reservations", "view_flights"],
   aircraft: ["read_aircraft", "write_aircraft", "manage_maintenance"],
   operations: ["read_operations", "write_operations", "manage_schedules"],
