@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   title: "Diogenes Travel Portal - Giriş",
   description: "Seyahat Yönetim Sistemi - Diogenes Travel Portal",
   generator: "v0.app",
+  icons: {
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
+    shortcut: "/images/logo.png",
+  },
 }
 
 export default function RootLayout({
